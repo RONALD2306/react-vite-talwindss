@@ -1,9 +1,42 @@
+/* eslint-disable react-refresh/only-export-components */
 import { createContext, useState, useEffect } from "react"
 
 export const ShoppingCartContext = createContext()
 
+export const initializeLocalStorage = () => {
+    
+    const accountInLocalStorage = localStorage.getItem('account')
+    const signOutInLocalStorage = localStorage.getItem('sign-ou')
+    let parsedAccount
+    let parsedSignOut
+
+    if (!accountInLocalStorage) {
+        localStorage.setItem('account', JSON.stringify({}))
+        parsedAccount = {}
+    } else {
+        // eslint-disable-next-line no-unused-vars
+        parsedAccount = JSON.parse(accountInLocalStorage)
+    }
+
+    if (!signOutInLocalStorage) {
+        localStorage.setItem('sign-out', JSON.stringify(false))
+        parsedSignOut = false
+    } else {
+        // eslint-disable-next-line no-unused-vars
+        parsedSignOut = JSON.parse(signOutInLocalStorage)
+    }
+
+}
+
 // eslint-disable-next-line react/prop-types
 export const ShoppingCartProvider = ({children}) =>{
+
+    //My Account
+    const [account, setAccount] = useState({})
+
+    //Sign out
+    const [signOut, setSignOut] = useState({})
+
     // Contador de articulos
     const [count, setCount] = useState(0)
 
@@ -38,6 +71,8 @@ export const ShoppingCartProvider = ({children}) =>{
 
     //Get Products by category
     const [searchByCategory, setSearchByCategory] = useState(null)
+
+    
     
 
     useEffect(() => {
@@ -104,7 +139,11 @@ export const ShoppingCartProvider = ({children}) =>{
             setSearchByTitle,
             filteredItems,
             searchByCategory,
-            setSearchByCategory
+            setSearchByCategory,
+            account,
+            setAccount,
+            signOut,
+            setSignOut
         }}>
             {children}
         </ShoppingCartContext.Provider>
